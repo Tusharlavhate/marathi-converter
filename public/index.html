@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Marathi Converter</title>
+</head>
+<body>
+  <h2>Type Anything</h2>
+
+  <input type="text" id="textInput" placeholder="Enter any text" />
+  <button onclick="convertText()">Convert</button>
+
+  <p id="result"></p>
+
+  <script>
+    async function convertText() {
+      const text = document.getElementById("textInput").value;
+      const result = document.getElementById("result");
+
+      if (!text) {
+        result.innerText = "Please enter text";
+        return;
+      }
+
+      try {
+        const response = await fetch("/convert", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ text: text })
+        });
+
+        const data = await response.json();
+        result.innerText = data.marathi || data.message;
+      } catch (error) {
+        result.innerText = "Something went wrong";
+      }
+    }
+  </script>
+</body>
+</html>
